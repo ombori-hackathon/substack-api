@@ -7,6 +7,8 @@ from sqlalchemy.orm import Session
 from app.db import Base, engine, get_db
 from app.models.item import Item as ItemModel
 from app.schemas.item import Item as ItemSchema
+from app.routers import auth, categories, reminders, subscriptions, users
+from app.services.scheduler import start_scheduler, stop_scheduler
 
 
 def seed_database(db: Session):
@@ -29,8 +31,14 @@ async def lifespan(app: FastAPI):
     db = next(get_db())
     seed_database(db)
     db.close()
+
+    # Start the background scheduler
+    start_scheduler()
+
     yield
-    # Shutdown: cleanup if needed
+
+    # Shutdown: stop the scheduler
+    stop_scheduler()
 
 
 app = FastAPI(
@@ -47,6 +55,12 @@ app.add_middleware(
     allow_methods=["*"],
     allow_headers=["*"],
 )
+
+app.include_router(auth.router)
+app.include_router(categories.router)
+app.include_router(subscriptions.router)
+app.include_router(users.router)
+app.include_router(reminders.router)
 
 
 @app.get("/")
