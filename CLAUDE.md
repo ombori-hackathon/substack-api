@@ -8,6 +8,18 @@ Python FastAPI backend with PostgreSQL database.
 - Sync dependencies: `uv sync`
 - Add dependency: `uv add <package>`
 
+## Skills (Commands)
+Available in `.claude/skills/`:
+- `/feature` - Build new API features with TDD
+- `/test` - Run pytest tests
+
+## Agents
+Available in `.claude/agents/`:
+- `python-coder` - FastAPI development
+- `tester` - Write and run pytest tests
+- `reviewer` - Code review before commits
+- `debugger` - Investigate API issues
+
 ## Project Structure
 ```
 app/
